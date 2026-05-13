@@ -1,0 +1,83 @@
+import unittest
+   from src.main import Pet, Groomer, Service, Appointment
+
+   class TestGroomingSalon(unittest.TestCase):
+
+       def test_pet_creation(self):
+           pet = Pet("Buddy", "Golden Retriever", 3)
+           self.assertEqual(pet.name, "Buddy")
+           self.assertEqual(pet.breed, "Golden Retriever")
+           self.assertEqual(pet.age, 3)
+
+       def test_groomer_creation(self):
+           groomer = Groomer("Alice", 5)
+           self.assertEqual(groomer.name, "Alice")
+           self.assertEqual(groomer.experience, 5)
+
+       def test_service_creation(self):
+           service = Service("Haircut", "Basic grooming service", 30)
+           self.assertEqual(service.name, "Haircut")
+           self.assertEqual(service.price, 30)
+
+       def test_appointment_confirmation(self):
+           pet = Pet("Buddy", "Golden Retriever", 3)
+           groomer = Groomer("Alice", 5)
+           appointment = Appointment("2023-10-01", "10:00", pet, groomer)
+           appointment.confirm()
+           self.assertEqual(appointment.status, "Confirmed")
+# test_grooming_salon.py
+import unittest
+from grooming_salon import GroomingSalon
+
+class TestGroomingSalon(unittest.TestCase):
+
+    def setUp(self):
+        self.salon = GroomingSalon()
+
+    def test_book_appointment_success(self):
+        self.salon.book_appointment("John", "09:00", "Haircut", 30)
+        expected_appointment = {
+            "09:00": {
+                "client_name": "John",
+                "service": "Haircut",
+                "duration": 30
+            }
+        }
+        self.assertEqual(self.salon.get_appointments(), expected_appointment)
+
+    def test_book_appointment_time_slot_already_booked(self):
+        self.salon.book_appointment("John", "09:00", "Haircut", 30)
+        with self.assertRaises(ValueError) as context:
+            self.salon.book_appointment("Jane", "09:00", "Shave", 15)
+        self.assertEqual(str(context.exception), "Time slot already booked")
+
+    def test_cancel_appointment_success(self):
+        self.salon.book_appointment("John", "09:00", "Haircut", 30)
+        self.salon.cancel_appointment("09:00")
+        self.assertEqual(self.salon.get_appointments(), {})
+
+    def test_cancel_nonexistent_appointment(self):
+        with self.assertRaises(ValueError) as context:
+            self.salon.cancel_appointment("10:00")
+        self.assertEqual(str(context.exception), "No appointment found at this time")
+
+    def test_get_appointments_empty(self):
+        self.assertEqual(self.salon.get_appointments(), {})
+
+    def test_get_multiple_appointments(self):
+        self.salon.book_appointment("John", "09:00", "Haircut", 30)
+        self.salon.book_appointment("Jane", "10:00", "Nail Trim", 20)
+        expected_appointments = {
+            "09:00": {
+                "client_name": "John",
+                "service": "Haircut",
+                "duration": 30
+            },
+            "10:00": {
+                "client_name": "Jane",
+                "service": "Nail Trim",
+                "duration": 20
+            }
+        }
+
+
