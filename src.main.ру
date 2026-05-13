@@ -1,0 +1,31 @@
+class Pet:
+       def __init__(self, name, breed, age):
+           self.name = name
+           self.breed = breed
+           self.age = age
+
+   class Groomer:
+       def __init__(self, name, experience):
+           self.name = name
+           self.experience = experience
+
+   class Service:
+       def __init__(self, name, description, price):
+           self.name = name
+           self.description = description
+           self.price = price
+
+   class Appointment:
+       def __init__(self, date, time, pet, groomer):
+           self.date = date
+           self.time = time
+           self.pet = pet
+           self.groomer = groomer
+           self.status = "Scheduled"
+       
+       def confirm(self):
+           self.status = "Confirmed"
+self.pet - self Ресурсы и информация.
+www.self.pet
+
+
